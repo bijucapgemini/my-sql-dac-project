@@ -18,8 +18,6 @@ jobs:
         env:
           SA_PASSWORD: ${{ secrets.SA_PASSWORD }}
           ACCEPT_EULA: Y
-        ports:
-          - 1433:1433
 
       - name: Build DACPAC
         run: |
