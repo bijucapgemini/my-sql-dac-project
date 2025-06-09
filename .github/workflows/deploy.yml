@@ -1,0 +1,34 @@
+name: Deploy DACPAC
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup SQL Server
+        uses: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: ${{ secrets.SA_PASSWORD }}
+          ACCEPT_EULA: Y
+        ports:
+          - 1433:1433
+
+      - name: Build DACPAC
+        run: |
+          dotnet build dacpac/my-sql-dac-project.sqlproj
+
+      - name: Deploy DACPAC
+        run: |
+          sqlpackage /Action:Publish /SourceFile:dacpac/my-sql-dac-project.dacpac /TargetConnectionString:"Server=localhost;Database=YourDatabase;User Id=sa;Password=${{ secrets.SA_PASSWORD }};" /p:AllowIncompatiblePlatform=true
+
+      - name: Run post-deployment script
+        run: |
+          sqlcmd -S localhost -d YourDatabase -U sa -P "${{ secrets.SA_PASSWORD }}" -i src/scripts/post-deployment.sql

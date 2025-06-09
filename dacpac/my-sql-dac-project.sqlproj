@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.SqlServer.Dac.Extensions.Sdk">
+
+  <PropertyGroup>
+    <DacPacOutputPath>..\dacpac\my-sql-dac-project.dacpac</DacPacOutputPath>
+    <TargetFramework>net6.0</TargetFramework>
+    <DacServicesVersion>150</DacServicesVersion>
+    <DacPacName>my-sql-dac-project</DacPacName>
+    <DacPacDescription>My SQL DAC Project</DacPacDescription>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SqlFile Include="..\src\schemas\dbo\Tables\**\*.sql" />
+    <SqlFile Include="..\src\schemas\dbo\Views\**\*.sql" />
+    <SqlFile Include="..\src\schemas\dbo\StoredProcedures\**\*.sql" />
+    <SqlFile Include="..\src\scripts\post-deployment.sql" />
+  </ItemGroup>
+
+</Project>
